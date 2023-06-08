@@ -15,5 +15,6 @@ type BookServiceInterface interface {
 
 type BookDataInterface interface {
 	Store(new BookEntity) (uint, error)
+	SelectById(id uint) (BookEntity, error)
 
 }
