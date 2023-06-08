@@ -6,10 +6,10 @@ import (
 )
 
 type BookRequest struct {
-	Title         string
-	PublishedYear int
-	ISBN          string
-	Author        []delivery.AuthorRequest
+	Title         string `json:"title" form:"title"`
+	PublishedYear int `json:"published_year" form:"published_year"`
+	ISBN          string `json:"isbn" form:"isbn"`
+	Author        []delivery.AuthorRequest `json:"author" form:"author"`
 }
 
 func ToEntity(bookRequest BookRequest) books.BookEntity {

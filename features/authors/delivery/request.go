@@ -3,8 +3,8 @@ package delivery
 import "online-library/features/authors"
 
 type AuthorRequest struct {
-	Name    string
-	Country string
+	Name    string `json:"name" form:"name"`
+	Country string `json:"country" form:"country"`
 }
 
 func ToEntity(authorRequest AuthorRequest) authors.AuthorEntity {
