@@ -6,6 +6,7 @@ type BookEntity struct {
 	Id            uint
 	Title         string
 	PublishedYear int
+	ISBN          string
 	Author        []authors.AuthorEntity
 }
 
@@ -16,5 +17,4 @@ type BookServiceInterface interface {
 type BookDataInterface interface {
 	Store(new BookEntity) (uint, error)
 	SelectById(id uint) (BookEntity, error)
-
 }
