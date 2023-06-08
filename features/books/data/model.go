@@ -12,6 +12,6 @@ type Book struct {
 	Title         string
 	PublishedYear int
 	ISBN          string
-	Authors []*data.Author `gorm:"many2many:book_authors;"`
+	Authors []data.Author `gorm:"many2many:book_authors;"`
 }
 
