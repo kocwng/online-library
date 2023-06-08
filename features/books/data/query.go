@@ -41,6 +41,14 @@ func (q *bookQuery) Edit(update books.BookEntity, id uint) error {
 	return nil
 }
 
+func (q bookQuery) Delete(id uint) error {
+	var book Book
+	if err := q.db.Delete(&book, id); err.Error != nil {
+		return err.Error
+	}
+	return nil
+}
+
 func (q *bookQuery) AddAuthorAssociation(bookID uint, authorID uint) error {
 	association := map[string]interface{}{
 		"book_id":   bookID,

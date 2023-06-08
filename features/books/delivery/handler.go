@@ -64,6 +64,22 @@ func (h *BookHandler) Update(c echo.Context) error {
 	return c.JSON(http.StatusOK, helpers.ResponseSuccess("Update Data Success", ToResponse(feedback)))
 }
 
+func (h *BookHandler) Delete(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	_, errId := h.bookService.GetById(uint(id))
+	if errId != nil {
+		return c.JSON(http.StatusNotFound, helpers.ResponseFail(errId.Error()))
+	}
+
+	if err := h.bookService.Delete(uint(id)); err != nil {
+		return c.JSON(http.StatusNotFound, helpers.ResponseFail(err.Error()))
+	}
+
+	return c.JSON(http.StatusOK, helpers.ResponseSuccess("Delete Data Success", nil))
+}
+
+
+
 // func (h *BookHandler) Create(c echo.Context) error {
 // 	var formInput BookRequest
 // 	if err := c.Bind(&formInput); err != nil {

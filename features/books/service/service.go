@@ -68,3 +68,11 @@ func (s *bookService) AddAuthorAssociation(bookID uint, authorID uint) error {
 func (s *bookService) GetById(id uint) (books.BookEntity, error) {
 	return s.Data.SelectById(id)
 }
+
+func (s *bookService) Delete(id uint) error {
+	_, err := s.Data.SelectById(id)
+	if err != nil {
+		return nil
+	}
+	return s.Data.Delete(id)
+}
