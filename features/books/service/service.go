@@ -47,6 +47,20 @@ func (s *bookService) Create(new books.BookEntity) (books.BookEntity, error) {
 	return s.Data.SelectById(bookID)
 }
 
+func (s *bookService) Update(feedbackEntity books.BookEntity, id uint) (books.BookEntity, error) {
+	//check exist data
+	if checkDataExist, err := s.Data.SelectById(id); err != nil {
+		return checkDataExist, err
+	}
+
+	//update
+	err := s.Data.Edit(feedbackEntity, id)
+	if err != nil {
+		return books.BookEntity{}, err
+	}
+	return s.Data.SelectById(id)
+}
+
 func (s *bookService) AddAuthorAssociation(bookID uint, authorID uint) error {
 	return s.Data.AddAuthorAssociation(bookID, authorID)
 }

@@ -16,4 +16,6 @@ func BookRouter(db *gorm.DB, e *echo.Echo) {
 
 	g := e.Group("/discussions")
 	g.POST("", handler.Create)
+	g.PUT("/:id", handler.Update)
+	
 }

@@ -2,6 +2,7 @@ package delivery
 
 import (
 	"net/http"
+	"strconv"
 	// "online-library/features/authors"
 	"online-library/features/books"
 	"online-library/utils/helpers"
@@ -44,6 +45,23 @@ func (h *BookHandler) Create(c echo.Context) error {
 
 	bookEntity, _ := h.bookService.GetById(book.Id)
 	return c.JSON(http.StatusCreated, helpers.ResponseSuccess("Create Data Success", ToResponse(bookEntity)))
+}
+
+func (h *BookHandler) Update(c echo.Context) error {
+	var formInput BookRequest
+	if err := c.Bind(&formInput); err != nil {
+		return c.JSON(http.StatusBadRequest, helpers.ResponseFail("error bind data"))
+	}
+
+	_id, _ := strconv.Atoi(c.Param("id"))
+	id := uint(_id)
+
+	feedback, err := h.bookService.Update(ToEntity(formInput), id)
+	if err != nil {
+		return c.JSON(http.StatusNotFound, helpers.ResponseFail(err.Error()))
+	}
+
+	return c.JSON(http.StatusOK, helpers.ResponseSuccess("Update Data Success", ToResponse(feedback)))
 }
 
 // func (h *BookHandler) Create(c echo.Context) error {
