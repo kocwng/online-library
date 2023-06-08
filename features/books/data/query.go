@@ -32,3 +32,13 @@ func (q *bookQuery) SelectById(id uint) (books.BookEntity, error) {
 
 	return ToEntity(book), nil
 }
+
+func (q *bookQuery) AddAuthorAssociation(bookID uint, authorID uint) error {
+	association := map[string]interface{}{
+		"book_id":   bookID,
+		"author_id": authorID,
+	}
+
+	return q.db.Table("book_authors").Create(&association).Error
+}
+

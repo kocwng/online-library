@@ -18,15 +18,39 @@ func New(data books.BookDataInterface) books.BookServiceInterface {
 	}
 }
 
+// func (s *bookService) Create(new books.BookEntity) (books.BookEntity, error) {
+// 	s.validate = validator.New()
+// 	errValidate := s.validate.StructExcept(new, "Author")
+// 	if errValidate != nil {
+// 		return books.BookEntity{}, errValidate
+// 	}
+// 	bookId, err := s.Data.Store(new)
+// 	if err != nil {
+// 		return books.BookEntity{}, err
+// 	}
+// 	return s.Data.SelectById(bookId)
+// }
+
+
 func (s *bookService) Create(new books.BookEntity) (books.BookEntity, error) {
 	s.validate = validator.New()
 	errValidate := s.validate.StructExcept(new, "Author")
 	if errValidate != nil {
 		return books.BookEntity{}, errValidate
 	}
-	bookId, err := s.Data.Store(new)
+
+	bookID, err := s.Data.Store(new)
 	if err != nil {
 		return books.BookEntity{}, err
 	}
-	return s.Data.SelectById(bookId)
+
+	return s.Data.SelectById(bookID)
+}
+
+func (s *bookService) AddAuthorAssociation(bookID uint, authorID uint) error {
+	return s.Data.AddAuthorAssociation(bookID, authorID)
+}
+
+func (s *bookService) GetById(id uint) (books.BookEntity, error) {
+	return s.Data.SelectById(id)
 }
