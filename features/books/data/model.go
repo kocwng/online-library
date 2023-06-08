@@ -32,7 +32,7 @@ func ToEntity(book Book) books.BookEntity {
 	}
 }
 
-func ListToEntity(book []Book) []books.BookEntity {
+func ToListEntity(book []Book) []books.BookEntity {
 	var bookEntity []books.BookEntity
 	for _, v := range book {
 		bookEntity = append(bookEntity, ToEntity(v))
