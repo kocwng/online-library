@@ -12,7 +12,12 @@ type Book struct {
 	Title         string
 	PublishedYear int
 	ISBN          string
-	Authors []data.Author `gorm:"many2many:book_authors;"`
+	Author []data.Author `gorm:"many2many:book_authors;"`
+}
+
+type BookAuthor struct {
+	BookId uint
+	AuthorId uint
 }
 
 func FromEntity(bookEntity books.BookEntity) Book {
@@ -20,6 +25,7 @@ func FromEntity(bookEntity books.BookEntity) Book {
 		Title:         bookEntity.Title,
 		PublishedYear: bookEntity.PublishedYear,
 		ISBN:          bookEntity.ISBN,
+		
 	}
 }
 
@@ -29,6 +35,7 @@ func ToEntity(book Book) books.BookEntity {
 		Title:         book.Title,
 		PublishedYear: book.PublishedYear,
 		ISBN:          book.ISBN,
+
 	}
 }
 

@@ -49,6 +49,14 @@ func (q bookQuery) Delete(id uint) error {
 	return nil
 }
 
+// func (q *bookQuery) GetAll(authorId uint) ([]books.BookEntity, error) {
+// 	var book []Book
+// 	if err := q.db.Where("user_id = ?", authorId).Select("id,title").Order("title").Find(&book); err.Error != nil {
+// 		return nil, err.Error
+// 	}
+// 	return ToListEntity(book), nil
+// }
+
 func (q *bookQuery) AddAuthorAssociation(bookID uint, authorID uint) error {
 	association := map[string]interface{}{
 		"book_id":   bookID,
@@ -57,4 +65,22 @@ func (q *bookQuery) AddAuthorAssociation(bookID uint, authorID uint) error {
 
 	return q.db.Table("book_authors").Create(&association).Error
 }
+
+
+func (q *bookQuery) GetBooksByAuthor(authorID uint) ([]books.BookEntity, error) {
+	var books []Book
+	err := q.db.Table("books").
+		Select("books.id, books.title, books.published_year, books.isbn").
+		Joins("JOIN book_authors ON book_authors.book_id = books.id").
+		Where("book_authors.author_id = ? AND books.deleted_at IS NULL", authorID).
+		Find(&books).
+		Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return ToListEntity(books), nil
+}
+
 

@@ -18,4 +18,5 @@ func BookRouter(db *gorm.DB, e *echo.Echo) {
 	g.POST("", handler.Create)
 	g.PUT("/:id", handler.Update)
 	g.DELETE("/:id", handler.Delete)
+	g.GET("/:id", handler.GetBooksByAuthor)
 }

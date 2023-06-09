@@ -3,7 +3,10 @@ package delivery
 import (
 	"net/http"
 	"strconv"
+
 	// "online-library/features/authors"
+
+	// bookauthors "online-library/features/bookAuthors/data"
 	"online-library/features/books"
 	"online-library/utils/helpers"
 
@@ -23,29 +26,97 @@ import (
 // }
 
 type BookHandler struct {
-	bookService   books.BookServiceInterface
+	bookService books.BookServiceInterface
 }
 
 func New(srv books.BookServiceInterface) *BookHandler {
 	return &BookHandler{
-		bookService:   srv,
+		bookService: srv,
 	}
 }
+
+// func (h *BookHandler) CreateBook(c echo.Context) error {
+// 	var request BookRequest
+// 	if err := c.Bind(&request); err != nil {
+// 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+// 	}
+
+// 	if err := c.Validate(&request); err != nil {
+// 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+// 	}
+
+// 	bookEntity := request.ToEntity()
+// 	id, err := h.bookService.Create(bookEntity)
+// 	if err != nil {
+// 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create book"})
+// 	}
+
+// 	return c.JSON(http.StatusCreated, map[string]uint{"id": id})
+// }
+
+// func (h *BookHandler) Create(c echo.Context) error {
+// 	var formInput BookRequest
+// 	if err := c.Bind(&formInput); err != nil {
+// 		return c.JSON(http.StatusBadRequest, helpers.ResponseFail("error bind data"))
+// 	}
+
+// 	book, err := h.bookService.Create(ToEntity(formInput))
+// 	if err != nil {
+// 		return c.JSON(http.StatusBadRequest, helpers.ResponseFail(err.Error()))
+// 	}
+
+// 	bookEntity, _ := h.bookService.GetById(book.Id)
+// 	return c.JSON(http.StatusCreated, helpers.ResponseSuccess("Create Data Success", ToResponse(bookEntity)))
+// }
+
+// func (h *BookHandler) Create(c echo.Context) error {
+// 	var formInput BookRequest
+// 	if err := c.Bind(&formInput); err != nil {
+// 		return c.JSON(http.StatusBadRequest, helpers.ResponseFail("error bind data"))
+// 	}
+
+// 	// Store book data
+// 	book, err := h.bookService.Create(ToEntity(formInput))
+// 	if err != nil {
+// 		return c.JSON(http.StatusBadRequest, helpers.ResponseFail(err.Error()))
+// 	}
+
+// 	// bookAuthor := bookauthors.ToEntity(&formInput)
+
+// 	// Store author associations
+// 	for _, authorID := range formInput.AuthorId {
+// 		if err := h.bookService.AddAuthorAssociation(book.Id, authorID); err != nil {
+// 			return c.JSON(http.StatusInternalServerError, helpers.ResponseFail(err.Error()))
+// 		}
+// 	}
+
+// 	bookEntity, _ := h.bookService.GetById(book.Id)
+// 	return c.JSON(http.StatusCreated, helpers.ResponseSuccess("Create Data Success", ToResponse(bookEntity)))
+// }
 
 func (h *BookHandler) Create(c echo.Context) error {
-	var formInput BookRequest
-	if err := c.Bind(&formInput); err != nil {
-		return c.JSON(http.StatusBadRequest, helpers.ResponseFail("error bind data"))
-	}
+    var formInput BookRequest
+    if err := c.Bind(&formInput); err != nil {
+        return c.JSON(http.StatusBadRequest, helpers.ResponseFail("error bind data"))
+    }
 
-	book, err := h.bookService.Create(ToEntity(formInput))
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, helpers.ResponseFail(err.Error()))
-	}
+    // Store book data
+    book, err := h.bookService.Create(ToEntity(formInput))
+    if err != nil {
+        return c.JSON(http.StatusBadRequest, helpers.ResponseFail(err.Error()))
+    }
 
-	bookEntity, _ := h.bookService.GetById(book.Id)
-	return c.JSON(http.StatusCreated, helpers.ResponseSuccess("Create Data Success", ToResponse(bookEntity)))
+    // Store author associations
+    for _, authorID := range formInput.AuthorId {
+        if err := h.bookService.AddAuthorAssociation(book.Id, authorID); err != nil {
+            return c.JSON(http.StatusInternalServerError, helpers.ResponseFail(err.Error()))
+        }
+    }
+
+    bookEntity, _ := h.bookService.GetById(book.Id)
+    return c.JSON(http.StatusCreated, helpers.ResponseSuccess("Create Data Success", ToResponse(bookEntity)))
 }
+
 
 func (h *BookHandler) Update(c echo.Context) error {
 	var formInput BookRequest
@@ -78,36 +149,13 @@ func (h *BookHandler) Delete(c echo.Context) error {
 	return c.JSON(http.StatusOK, helpers.ResponseSuccess("Delete Data Success", nil))
 }
 
+func (h *BookHandler) GetBooksByAuthor(c echo.Context) error {
+	authorID,_ := strconv.Atoi(c.Param("id"))
 
+	books, err := h.bookService.GetBooksByAuthor(uint(authorID))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helpers.ResponseFail(err.Error()))
+	}
 
-// func (h *BookHandler) Create(c echo.Context) error {
-// 	var formInput BookRequest
-// 	if err := c.Bind(&formInput); err != nil {
-// 		return c.JSON(http.StatusBadRequest, helpers.ResponseFail("error bind data"))
-// 	}
-
-// 	bookEntity := ToEntity(formInput)
-// 	book, err := h.bookService.Create(bookEntity)
-// 	if err != nil {
-// 		return c.JSON(http.StatusBadRequest, helpers.ResponseFail(err.Error()))
-// 	}
-
-// 	bookEntity, err = h.bookService.GetById(book.Id)
-// 	if err != nil {
-// 		return c.JSON(http.StatusInternalServerError, helpers.ResponseFail(err.Error()))
-// 	}
-
-// 	// Store authors in the authors table
-// 	for _, author := range formInput.Author {
-// 		authorEntity := authors.AuthorEntity{
-// 			Name:    author.Name,
-// 			Country: author.Country,
-// 		}
-// 		_, err := h.authorService.Create(authorEntity)
-// 		if err != nil {
-// 			return c.JSON(http.StatusInternalServerError, helpers.ResponseFail(err.Error()))
-// 		}
-// 	}
-
-// 	return c.JSON(http.StatusCreated, helpers.ResponseSuccess("Create Data Success", ToResponse(bookEntity)))
-// }
+	return c.JSON(http.StatusOK, helpers.ResponseSuccess("Get Books By Author Success", books))
+}

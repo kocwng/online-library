@@ -8,7 +8,7 @@ type BookEntity struct {
 	PublishedYear int
 	ISBN          string
 	Author        []authors.AuthorEntity
-	AuthorId      []int
+	AuthorId      []uint
 }
 
 type BookServiceInterface interface {
@@ -17,6 +17,9 @@ type BookServiceInterface interface {
 	GetById(id uint) (BookEntity, error)
 	Update(update BookEntity, id uint) (BookEntity, error)
 	Delete(id uint) error
+	GetBooksByAuthor(authorID uint) ([]BookEntity, error)
+	// GetAll() ([]BookEntity, error)
+
 
 }
 
@@ -26,5 +29,9 @@ type BookDataInterface interface {
 	AddAuthorAssociation(bookID uint, authorID uint) error
 	Edit(update BookEntity, id uint) error
 	Delete(id uint) error
+	GetBooksByAuthor(authorID uint) ([]BookEntity, error)
+
+	// GetAll() ([]BookEntity, error)
+
 
 }

@@ -10,7 +10,13 @@ type BookRequest struct {
 	PublishedYear int                      `json:"published_year" form:"published_year"`
 	ISBN          string                   `json:"isbn" form:"isbn"`
 	Author        []delivery.AuthorRequest `json:"author" form:"author"`
-	// AuthorId      []int                    `json:"author_id" form:"author_id"`
+	AuthorId      []uint                    `json:"author_id" form:"author_id"`
+}
+
+type BookAuthorRequest struct {
+	BookID uint `json:"book_id"`
+	AuthorID uint `json:"author_id"`
+
 }
 
 func ToEntity(bookRequest BookRequest) books.BookEntity {
@@ -18,11 +24,11 @@ func ToEntity(bookRequest BookRequest) books.BookEntity {
 		Title:         bookRequest.Title,
 		PublishedYear: bookRequest.PublishedYear,
 		ISBN:          bookRequest.ISBN,
-		// AuthorId: bookRequest.AuthorId,
+		AuthorId: bookRequest.AuthorId,
 	}
 
 	// for _, v := range bookRequest.AuthorId {
-	// 	result.Author = append(result.Author, )
+	// 	result.AuthorId = append(result.AuthorId, delivery.ToEntity(v))
 	// }
 
 	for _, v := range bookRequest.Author {

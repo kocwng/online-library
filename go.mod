@@ -5,6 +5,7 @@ go 1.19
 require github.com/spf13/viper v1.16.0
 
 require (
+	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
@@ -23,6 +24,7 @@ require (
 require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-playground/validator v9.31.0+incompatible
+	github.com/go-playground/validator/v10 v10.14.1
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo/v4 v4.10.2
