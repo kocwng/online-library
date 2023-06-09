@@ -63,6 +63,11 @@ func (s *authorService) Delete(id uint) error {
 	return s.Data.Delete(id)
 }
 
-// func (s *authorService) GetAll() ([]authors.AuthorEntity, error) {
-// 	return s.Data.GetAll()
-// }
+func (s *authorService) GetAuthorsByBook(bookID uint) ([]authors.AuthorEntity, error) {
+	books, err := s.Data.GetAuthorsByBook(bookID)
+	if err != nil {
+		return nil, err
+	}
+
+	return books, nil
+}

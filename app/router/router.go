@@ -11,6 +11,7 @@ import (
 func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.GET("/", index)
 	BookRouter(db, e)
+	AuthorRouter(db, e)
 
 }
 

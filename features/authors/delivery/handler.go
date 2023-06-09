@@ -64,3 +64,14 @@ func (h *AuthorHandler) Delete(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, helpers.ResponseSuccess("Delete Data Success", nil))
 }
+
+func (h *AuthorHandler) GetAuthorsByBook(c echo.Context) error {
+	authorID,_ := strconv.Atoi(c.Param("id"))
+
+	authors, err := h.authorService.GetAuthorsByBook(uint(authorID))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helpers.ResponseFail(err.Error()))
+	}
+
+	return c.JSON(http.StatusOK, helpers.ResponseSuccess("Get Authors By Book Success", authors))
+}

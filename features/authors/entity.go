@@ -13,6 +13,8 @@ type AuthorServiceInterface interface {
 	GetById(id uint) (AuthorEntity, error)
 	Update(update AuthorEntity, id uint) (AuthorEntity, error)
 	Delete(id uint) error
+	GetAuthorsByBook(bookID uint) ([]AuthorEntity, error)
+
 	// GetAll() ([]AuthorEntity, error)
 
 
@@ -24,6 +26,8 @@ type AuthorDataInterface interface {
 	// AddAuthorAssociation(authorID uint, authorID uint) error
 	Edit(update AuthorEntity, id uint) error
 	Delete(id uint) error
+	GetAuthorsByBook(bookID uint) ([]AuthorEntity, error)
+
 	// GetAll() ([]AuthorEntity, error)
 
 

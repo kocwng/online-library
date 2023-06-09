@@ -41,7 +41,7 @@ func (q *authorQuery) Edit(update authors.AuthorEntity, id uint) error {
 	return nil
 }
 
-func (q authorQuery) Delete(id uint) error {
+func (q *authorQuery) Delete(id uint) error {
 	var author Author
 	if err := q.db.Delete(&author, id); err.Error != nil {
 		return err.Error
@@ -49,5 +49,20 @@ func (q authorQuery) Delete(id uint) error {
 	return nil
 }
 
+func (q *authorQuery) GetAuthorsByBook(bookID uint) ([]authors.AuthorEntity, error) {
+	var author []Author
+	err := q.db.Table("books").
+		Select("authors.id, authors.name, authors.country").
+		Joins("JOIN book_authors ON book_authors.author_id = authors.id").
+		Where("book_authors.book_id = ? AND authors.deleted_at IS NULL", bookID).
+		Find(&author).
+		Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return ToListEntity(author), nil
+}
 
 
